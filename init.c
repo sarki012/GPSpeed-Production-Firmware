@@ -25,9 +25,9 @@ void init(void)
    // TRISEbits.TRISE2 = 0;   //GPS Reset
  //   LATEbits.LATE2 = 0;      
     TRISEbits.TRISE0 = 0;   //Colon
-    LATEbits.LATE0 = 0;
-  //  TRISBbits.TRISB0 = 1;   //INT0 Rising Edge Interrupt
-   /*
+    LATEbits.LATE0 = 1;
+    TRISBbits.TRISB0 = 1;   //INT0 Rising Edge Interrupt
+   
     //USART setup
     SPBRG = 0x18;        
     RCONbits.IPEN = 1;
@@ -42,6 +42,6 @@ void init(void)
     RCSTA=0b10010000;   //SPEN=1 CREN=1
     TXSTA=0b00100110;     //TXEN=1 Async BRGH = 1
     IPR1bits.RCIP = 1;        //high priority interrupt
-    BAUDCON = 0b00000010; */
+    BAUDCON = 0b00000010; 
     return;
 }

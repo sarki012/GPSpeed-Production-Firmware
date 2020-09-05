@@ -113,7 +113,7 @@ int m = 0, buffer_full = 0, seconds = 0;
 
 void __interrupt (high_priority)ISR(void)
 {
-    /*
+    
     if(INTCONbits.INT0IF)
     {
         INTCONbits.INT0IF = 0;
@@ -147,9 +147,8 @@ void __interrupt (high_priority)ISR(void)
             memcpy(nmea_buffer, nmea, 73);
             buffer_full = 1;
         }
-     * */
-        return;
-    
+    }
+    return;   
 }  
 /*
 void interrupt low_priority  LowIsr(void)
@@ -165,15 +164,6 @@ void interrupt low_priority  LowIsr(void)
 */
 void main(void)
 {
-    init();
-    while(1)
-    {
-        display(1234);
-        for(int i = 0; i < 10000; i++);
-        display_blank();
-        for(int i = 0; i < 10000; i++);
-    }
-    /*
     int fix = 0, ready = 0;
     init();     //Initialize UART
     while(1)
@@ -189,6 +179,5 @@ void main(void)
         if(ready)
             fix = 1;
     }
-     * */
     return;
 }
