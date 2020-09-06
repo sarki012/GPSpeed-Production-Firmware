@@ -941,6 +941,6 @@ void display_blank(void)
 }
 void delay2(void)
 {
-    for(int h = 0; h < 10; h++);
+    for(int h = 0; h < 3; h++);
     return;
 }

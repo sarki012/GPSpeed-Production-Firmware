@@ -24,7 +24,7 @@ void init(void)
     TRISEbits.TRISE1 = 0;   //Write Strobe
    // TRISEbits.TRISE2 = 0;   //GPS Reset
  //   LATEbits.LATE2 = 0;      
-    TRISEbits.TRISE0 = 0;   //Colon
+    TRISEbits.TRISE0 = 1;   //Colon
     LATEbits.LATE0 = 1;
     TRISBbits.TRISB0 = 1;   //INT0 Rising Edge Interrupt
    
