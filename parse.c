@@ -14,12 +14,13 @@
 
 int nmea_speed = 0, decimal_flag = 0, decimal_flag2 = 0;
 int average_buffer = 0, n = 0;
-int fix_status = 0;
+
 
 void display_slow(int);
 void display_fast(int);
 int parse(char *nmea_string)
 {
+    int fix_status = 0;
     for(int b = 0; b < 73; b++)
     {
         nmea_string++;
@@ -30,37 +31,26 @@ int parse(char *nmea_string)
             switch (*nmea_string)
             {
                 case '0': nmea_speed = 0;
-                fix_status = 1;     //We have a fix, stop blinking 8888
                 break;
                 case '1': nmea_speed = 100;
-                fix_status = 1;
                 break;
                 case '2': nmea_speed = 200;
-                fix_status = 1;
                 break;
                 case '3': nmea_speed = 300;
-                fix_status = 1;
                 break;
                 case '4': nmea_speed = 400;
-                fix_status = 1;
                 break;
                 case '5': nmea_speed = 500;
-                fix_status = 1;
                 break;
                 case '6': nmea_speed = 600;
-                fix_status = 1;
                 break;
                 case '7': nmea_speed = 700;
-                fix_status = 1;
                 break;
                 case '8': nmea_speed = 800;
-                fix_status = 1;
                 break;
                 case '9': nmea_speed = 900;
-                fix_status = 1;
                 break;
                 default : nmea_speed = 0;
-                fix_status = 0;
                 break;
             } 
             nmea_string++;
@@ -128,34 +118,39 @@ int parse(char *nmea_string)
                 break;
             } 
             nmea_speed = (int)(nmea_speed * 1.15076);   //knots to mph
+            fix_status = 1;
             if(decimal_flag)
             {
+                fix_status = 1;
                 average_buffer += nmea_speed;
                 n++;
                 if(n == 3)
                 {
                     average_buffer /= 3;
-                    if (average_buffer < 50)
+                    if (average_buffer <= 50)
+                    {
                         display_slow(0);
+                        fix_status = 10;
+                    }
+                    
                     else
+                    {
                         display_slow(average_buffer);   //show digits with decimal point
+                        fix_status = 10;
+                    }
                     decimal_flag = 0;
                     average_buffer = 0;
                     n = 0;
-                    return fix_status;
                 }
             }
             else if(decimal_flag2)
             {
                 display_fast(nmea_speed);   //show digits
                 decimal_flag2 = 0;
-                return fix_status;
+                fix_status = 10;
             }
-            else
-            {
-                return fix_status;
-            }
+            return fix_status;
         }
     }
-    return;
+    return fix_status;
 }

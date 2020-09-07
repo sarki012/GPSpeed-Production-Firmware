@@ -99,7 +99,7 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 void init(void);
-int parse(char *a);
+int parse(char *);
 void display_slow(int);
 void display_fast(int);
 void display (int);
@@ -110,6 +110,7 @@ char nmea_buffer[73];
 char *nmea_ptr = nmea;
 char *nmea_buffer_ptr = nmea_buffer;
 int m = 0, buffer_full = 0, seconds = 0;
+int ready = 0;
 
 void __interrupt (high_priority)ISR(void)
 {
@@ -164,19 +165,16 @@ void interrupt low_priority  LowIsr(void)
 */
 void main(void)
 {
-    int fix = 0, ready = 0;
     init();     //Initialize UART
-    while(1)
+    ready = parse(nmea_buffer);    //Parses UART receive buffer
+    while(ready < 1)
     {
         ready = parse(nmea_buffer);    //Parses UART receive buffer
-  //      if(!ready)
-    //    {
-        /*
-            display(8888);
-            for(int y = 0; y < 10000; y++);
-            display_blank();
-            for(int j = 0; j < 10000; j++);
-      //  }*/
+        display(8888);
+    }
+    while(1)
+    {
+        ready = parse(nmea_buffer);
     }
     return;
 }
