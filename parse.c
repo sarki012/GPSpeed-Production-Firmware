@@ -30,7 +30,7 @@ int parse(char *nmea_string)
             switch (*nmea_string)
             {
                 case '0': nmea_speed = 0;
-                fix_status = 1;
+                fix_status = 1;     //We have a fix, stop blinking 8888
                 break;
                 case '1': nmea_speed = 100;
                 fix_status = 1;

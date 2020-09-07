@@ -169,15 +169,14 @@ void main(void)
     while(1)
     {
         ready = parse(nmea_buffer);    //Parses UART receive buffer
-        if(!ready && !fix)
-        {
+  //      if(!ready)
+    //    {
+        /*
             display(8888);
             for(int y = 0; y < 10000; y++);
             display_blank();
-            for(int y = 0; y < 10000; y++);
-        }
-        if(ready)
-            fix = 1;
+            for(int j = 0; j < 10000; j++);
+      //  }*/
     }
     return;
 }
