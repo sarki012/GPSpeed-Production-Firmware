@@ -13,7 +13,8 @@
 #include <string.h>
 
 int nmea_speed = 0, decimal_flag = 0, decimal_flag2 = 0;
-int average_buffer = 0, n = 0;
+int average_buffer[5] = {0}; 
+int average = 0;
 
 
 void display_slow(int);
@@ -118,34 +119,28 @@ int parse(char *nmea_string)
                 break;
             } 
             nmea_speed = (int)(nmea_speed * 1.15076);   //knots to mph
-            fix_status = 1;
+            average_buffer[0] = nmea_speed;
+            average_buffer[4] = average_buffer[3];
+            average_buffer[3] = average_buffer[2];
+            average_buffer[2] = average_buffer[1];
+            average_buffer[1] = average_buffer[0];
+            average = (average_buffer[0] + average_buffer[1] + average_buffer[2] + average_buffer[3] + average_buffer[4]) / 5;
             if(decimal_flag)
             {
                 fix_status = 1;
-                average_buffer += nmea_speed;
-                n++;
-                if(n == 3)
+                if (average <= 50)
                 {
-                    average_buffer /= 3;
-                    if (average_buffer <= 50)
-                    {
-                        display_slow(0);
-                        fix_status = 10;
-                    }
-                    
-                    else
-                    {
-                        display_slow(average_buffer);   //show digits with decimal point
-                        fix_status = 10;
-                    }
-                    decimal_flag = 0;
-                    average_buffer = 0;
-                    n = 0;
+                    display_slow(0);
                 }
+                else
+                {
+                    display_slow(average);   //show digits with decimal point
+                }
+                decimal_flag = 0;
             }
             else if(decimal_flag2)
             {
-                display_fast(nmea_speed);   //show digits
+                display_fast(average);   //show digits
                 decimal_flag2 = 0;
                 fix_status = 10;
             }
