@@ -24,8 +24,8 @@ void init(void)
     TRISEbits.TRISE1 = 0;   //Write Strobe
    // TRISEbits.TRISE2 = 0;   //GPS Reset
  //   LATEbits.LATE2 = 0;      
-    TRISEbits.TRISE0 = 1;   //Colon
-    LATEbits.LATE0 = 1;
+    TRISEbits.TRISE0 = 0;   //Colon
+    LATEbits.LATE0 = 0;
     TRISBbits.TRISB0 = 1;   //INT0 Rising Edge Interrupt
    
     //USART setup
@@ -35,6 +35,8 @@ void init(void)
     INTCONbits.INT0IE = 1;	// Enable INT0 external interrupt
     INTCONbits.GIE = 1;		// Enable Global Interrupts
     INTCONbits.PEIE = 1;		// Enable Peripheral Interrupts
+    INTCONbits.TMR0IE = 1;
+    INTCON2bits.TMR0IP = 0;     //Low Priority
     INTCON2bits.INTEDG0 = 1;		// Set Interrupt on rising Edge
     INTCON2bits.RBPU = 1;        //Pullups disabled
     PIE1bits.RCIE = 1;
@@ -43,5 +45,10 @@ void init(void)
     TXSTA=0b00100110;     //TXEN=1 Async BRGH = 1
     IPR1bits.RCIP = 1;        //high priority interrupt
     BAUDCON = 0b00000010; 
+    
+    //Lap Button Setup
+    INTCONbits.INT0IE = 1;      //Enable INT0 external interrupt
+    INTCON2bits.INTEDG0 = 1;    //Set Interrupt on rising Edge
+    
     return;
 }

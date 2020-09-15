@@ -109,7 +109,7 @@ char nmea[73];
 char nmea_buffer[73];
 char *nmea_ptr = nmea;
 char *nmea_buffer_ptr = nmea_buffer;
-int m = 0, buffer_full = 0, seconds = 0;
+int m = 0, buffer_full = 0, seconds = 0, time = 0;
 int ready = 0;
 
 void __interrupt (high_priority)ISR(void)
@@ -119,8 +119,7 @@ void __interrupt (high_priority)ISR(void)
     {
         INTCONbits.INT0IF = 0;
         //Start Timer0
-        T0CON = 0b10000101;     //16 bit will interrupt every Second 
-        display(1234);
+        T0CON = 0b10000011;     //16 bit will interrupt every Second 
         return;
     }
     else if(PIR1bits.RCIF)
@@ -151,21 +150,21 @@ void __interrupt (high_priority)ISR(void)
     }
     return;   
 }  
-/*
-void interrupt low_priority  LowIsr(void)
+void __interrupt (low_priority)LowISR(void)
 {
- 
     if(INTCONbits.TMR0IF)
     {
         INTCONbits.TMR0IF = 0;
-        seconds++;
+        time++;
     }
     return;
 }
-*/
+
 void main(void)
 {
-    init();     //Initialize UART
+    init();     //Initialize UART and Lap Button
+    
+    /*
     ready = parse(nmea_buffer);    //Parses UART receive buffer
     while(ready < 1)
     {
@@ -175,6 +174,12 @@ void main(void)
     while(1)
     {
         ready = parse(nmea_buffer);
+    }
+     * */
+    while(1)
+    {
+        display(time);
+        for(int j = 0; j < 10000; j++);
     }
     return;
 }
